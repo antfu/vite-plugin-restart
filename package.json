@@ -1,0 +1,49 @@
+{
+  "name": "vite-plugin-restart",
+  "version": "0.0.1",
+  "description": "Custom files/globs to restart Vite server",
+  "homepage": "https://github.com/antfu/vite-plugin-restart",
+  "bugs": "https://github.com/antfu/vite-plugin-restart/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antfu/vite-plugin-restart"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "license": "MIT",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vite-plugin"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "dev": "npm run build -- --watch",
+    "prepublishOnly": "npm run build",
+    "release": "npx git-ensure -a && npx bumpp --commit --tag --push"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "micromatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.6.1",
+    "@types/debug": "^4.1.5",
+    "@types/micromatch": "^4.0.1",
+    "@types/node": "^14.14.34",
+    "eslint": "^7.22.0",
+    "jest": "^26.6.3",
+    "rollup": "^2.41.2",
+    "ts-jest": "^26.5.3",
+    "tsup": "^4.7.1",
+    "typescript": "^4.2.3",
+    "vite": "^2.1.0"
+  },
+  "peerDependencies": {
+    "vite": "^2.0.0-beta.69"
+  }
+}
