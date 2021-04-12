@@ -61,7 +61,7 @@ function VitePluginRestart(options: Options = {}): Plugin {
   let timerState = 'reload'
   let timer: number | undefined
 
-  let pathPlatform = process.platform === "win32" ? path.win32 : path.posix;
+  const pathPlatform = process.platform === 'win32' ? path.win32 : path.posix
 
   function clear() {
     clearTimeout(timer)
@@ -90,7 +90,6 @@ function VitePluginRestart(options: Options = {}): Plugin {
 
       reloadGlobs = toArray(options.reload).map(i => pathPlatform.resolve(root, i))
       restartGlobs = toArray(options.restart).map(i => pathPlatform.resolve(root, i))
-
     },
     configureServer(server) {
       server.watcher.add([
