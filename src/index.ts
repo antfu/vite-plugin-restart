@@ -86,7 +86,8 @@ function VitePluginRestart(options: Options = {}): Plugin {
       root = config.root
 
       reloadGlobs = toArray(options.reload).map(i => path.posix.resolve(root, i))
-      restartGlobs = toArray(options.restart).map(i => path.posix.resolve(root, i))
+      restartGlobs = toArray(options.restart).map((i2) => i2.replace(/\\/g, "/"));
+
     },
     configureServer(server) {
       server.watcher.add([
