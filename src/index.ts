@@ -60,6 +60,9 @@ function VitePluginRestart(options: Options = {}): Plugin {
 
   let timerState = 'reload'
   let timer: number | undefined
+
+  let pathPlatform = process.platform === "win32" ? path.win32 : path.posix;
+
   function clear() {
     clearTimeout(timer)
   }
@@ -85,8 +88,8 @@ function VitePluginRestart(options: Options = {}): Plugin {
         configFile = 'vite.config.ts'
       root = config.root
 
-      reloadGlobs = toArray(options.reload).map(i => path.posix.resolve(root, i))
-      restartGlobs = toArray(options.restart).map((i2) => i2.replace(/\\/g, "/"));
+      reloadGlobs = toArray(options.reload).map(i => pathPlatform.resolve(root, i))
+      restartGlobs = toArray(options.restart).map(i => pathPlatform.resolve(root, i))
 
     },
     configureServer(server) {
@@ -104,7 +107,7 @@ function VitePluginRestart(options: Options = {}): Plugin {
               console.log(
                 dim(new Date().toLocaleTimeString())
                 + bold.blue` [plugin-restart] `
-                + yellow`restarting server by ${path.posix.relative(root, file)}`,
+                + yellow`restarting server by ${pathPlatform.relative(root, file)}`,
               )
               timerState = ''
             })
