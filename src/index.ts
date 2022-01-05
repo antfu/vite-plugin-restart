@@ -86,10 +86,14 @@ function VitePluginRestart(options: Options = {}): Plugin {
     configResolved(config) {
       if (fs.existsSync('vite.config.ts'))
         configFile = 'vite.config.ts'
+      
+      // famous last words, but this *appears* to always be an absolute path
+      // with all slashes normalized to forward slashes `/`. this is compatible
+      // with path.posix.join, so we can use it to make an absolute path glob
       root = config.root
-
-      reloadGlobs = toArray(options.reload).map(i => pathPlatform.resolve(root, i))
-      restartGlobs = toArray(options.restart).map(i => pathPlatform.resolve(root, i))
+      
+      restartGlobs = toArray(options.restart).map(i => path.posix.join(root, i))
+      reloadGlobs = toArray(options.reload).map(i => path.posix.join(root, i))
     },
     configureServer(server) {
       server.watcher.add([
