@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { bold, dim, yellow } from 'chalk'
+import c from 'picocolors'
 import type { Plugin } from 'vite'
 import micromatch from 'micromatch'
 
@@ -86,12 +86,12 @@ function VitePluginRestart(options: Options = {}): Plugin {
     configResolved(config) {
       if (fs.existsSync('vite.config.ts'))
         configFile = 'vite.config.ts'
-      
+
       // famous last words, but this *appears* to always be an absolute path
       // with all slashes normalized to forward slashes `/`. this is compatible
       // with path.posix.join, so we can use it to make an absolute path glob
       root = config.root
-      
+
       restartGlobs = toArray(options.restart).map(i => path.posix.join(root, i))
       reloadGlobs = toArray(options.reload).map(i => path.posix.join(root, i))
     },
@@ -108,9 +108,9 @@ function VitePluginRestart(options: Options = {}): Plugin {
             schedule(() => {
               touch(configFile)
               console.log(
-                dim(new Date().toLocaleTimeString())
-                + bold.blue` [plugin-restart] `
-                + yellow`restarting server by ${pathPlatform.relative(root, file)}`,
+                c.dim(new Date().toLocaleTimeString())
+                + c.bold(c.blue(' [plugin-restart] '))
+                + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
               )
               timerState = ''
             })
