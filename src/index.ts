@@ -62,6 +62,7 @@ function VitePluginRestart(options: Options = {}): Plugin {
   let timer: number | undefined
 
   const pathPlatform = process.platform === 'win32' ? path.win32 : path.posix
+  const fileEvents = ['change', 'add', 'unlink']
 
   function clear() {
     clearTimeout(timer)
@@ -100,30 +101,32 @@ function VitePluginRestart(options: Options = {}): Plugin {
         ...restartGlobs,
         ...reloadGlobs,
       ])
-      server.watcher.on(
-        'change',
-        (file) => {
-          if (micromatch.isMatch(file, restartGlobs)) {
-            timerState = 'restart'
-            schedule(() => {
-              touch(configFile)
-              console.log(
-                c.dim(new Date().toLocaleTimeString())
-                + c.bold(c.blue(' [plugin-restart] '))
-                + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
-              )
-              timerState = ''
-            })
-          }
-          else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
-            timerState = 'reload'
-            schedule(() => {
-              server.ws.send({ type: 'full-reload' })
-              timerState = ''
-            })
-          }
-        },
-      )
+      fileEvents.forEach((ev) => {
+        server.watcher.on(
+          ev,
+          (file) => {
+            if (micromatch.isMatch(file, restartGlobs)) {
+              timerState = 'restart'
+              schedule(() => {
+                touch(configFile)
+                console.log(
+                  c.dim(new Date().toLocaleTimeString())
+                  + c.bold(c.blue(' [plugin-restart] '))
+                  + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
+                )
+               timerState = ''
+              })
+            }
+            else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
+              timerState = 'reload'
+              schedule(() => {
+                server.ws.send({ type: 'full-reload' })
+                timerState = ''
+              })
+            }
+          },
+        )
+      })      
     },
   }
 }
