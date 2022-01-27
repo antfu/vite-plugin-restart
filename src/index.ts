@@ -70,32 +70,6 @@ function VitePluginRestart(options: Options = {}): Plugin {
     clear()
     timer = setTimeout(fn, delay) as any as number
   }
-  function performRestart(server: ViteDevServer, ev: string){
-    server.watcher.on(
-      ev,
-      (file) => {
-        if (micromatch.isMatch(file, restartGlobs)) {
-          timerState = 'restart'
-          schedule(() => {
-            touch(configFile)
-            console.log(
-              c.dim(new Date().toLocaleTimeString())
-              + c.bold(c.blue(' [plugin-restart] '))
-              + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
-            )
-           timerState = ''
-          })
-        }
-        else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
-          timerState = 'reload'
-          schedule(() => {
-            server.ws.send({ type: 'full-reload' })
-            timerState = ''
-          })
-        }
-      },
-    )
-  }
 
   return {
     name: `vite-plugin-restart:${i++}`,
@@ -126,9 +100,32 @@ function VitePluginRestart(options: Options = {}): Plugin {
         ...restartGlobs,
         ...reloadGlobs,
       ])
-      performRestart(server, "add") 
-      performRestart(server, "change") 
-      performRestart(server, "unlink") 
+      server.watcher.on('add', handleFileChange)
+      server.watcher.on('change', handleFileChange)
+      server.watcher.on('unlink', handleFileChange)
+
+      function handleFileChange(file: string) {
+        if (micromatch.isMatch(file, restartGlobs)) {
+          timerState = 'restart'
+          schedule(() => {
+            touch(configFile)
+            // eslint-disable-next-line no-console
+            console.log(
+              c.dim(new Date().toLocaleTimeString())
+              + c.bold(c.blue(' [plugin-restart] '))
+              + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
+            )
+            timerState = ''
+          })
+        }
+        else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
+          timerState = 'reload'
+          schedule(() => {
+            server.ws.send({ type: 'full-reload' })
+            timerState = ''
+          })
+        }
+      }
     },
   }
 }
