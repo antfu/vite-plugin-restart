@@ -100,30 +100,32 @@ function VitePluginRestart(options: Options = {}): Plugin {
         ...restartGlobs,
         ...reloadGlobs,
       ])
-      server.watcher.on(
-        'change',
-        (file) => {
-          if (micromatch.isMatch(file, restartGlobs)) {
-            timerState = 'restart'
-            schedule(() => {
-              touch(configFile)
-              console.log(
-                c.dim(new Date().toLocaleTimeString())
-                + c.bold(c.blue(' [plugin-restart] '))
-                + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
-              )
-              timerState = ''
-            })
-          }
-          else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
-            timerState = 'reload'
-            schedule(() => {
-              server.ws.send({ type: 'full-reload' })
-              timerState = ''
-            })
-          }
-        },
-      )
+      server.watcher.on('add', handleFileChange)
+      server.watcher.on('change', handleFileChange)
+      server.watcher.on('unlink', handleFileChange)
+
+      function handleFileChange(file: string) {
+        if (micromatch.isMatch(file, restartGlobs)) {
+          timerState = 'restart'
+          schedule(() => {
+            touch(configFile)
+            // eslint-disable-next-line no-console
+            console.log(
+              c.dim(new Date().toLocaleTimeString())
+              + c.bold(c.blue(' [plugin-restart] '))
+              + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
+            )
+            timerState = ''
+          })
+        }
+        else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
+          timerState = 'reload'
+          schedule(() => {
+            server.ws.send({ type: 'full-reload' })
+            timerState = ''
+          })
+        }
+      }
     },
   }
 }
