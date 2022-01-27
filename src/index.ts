@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import c from 'picocolors'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { Plugin } from 'vite'
 import micromatch from 'micromatch'
 
 interface Options {
