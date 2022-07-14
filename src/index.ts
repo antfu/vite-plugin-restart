@@ -56,12 +56,8 @@ function VitePluginRestart(options: Options = {}): Plugin {
   let reloadGlobs: string[] = []
   let restartGlobs: string[] = []
 
-  let configFile = 'vite.config.js'
-
   let timerState = 'reload'
   let timer: number | undefined
-
-  const pathPlatform = process.platform === 'win32' ? path.win32 : path.posix
 
   function clear() {
     clearTimeout(timer)
@@ -84,9 +80,6 @@ function VitePluginRestart(options: Options = {}): Plugin {
       c.server.watch.disableGlobbing = false
     },
     configResolved(config) {
-      if (fs.existsSync('vite.config.ts'))
-        configFile = 'vite.config.ts'
-
       // famous last words, but this *appears* to always be an absolute path
       // with all slashes normalized to forward slashes `/`. this is compatible
       // with path.posix.join, so we can use it to make an absolute path glob
@@ -107,16 +100,7 @@ function VitePluginRestart(options: Options = {}): Plugin {
       function handleFileChange(file: string) {
         if (micromatch.isMatch(file, restartGlobs)) {
           timerState = 'restart'
-          schedule(() => {
-            touch(configFile)
-            // eslint-disable-next-line no-console
-            console.log(
-              c.dim(new Date().toLocaleTimeString())
-              + c.bold(c.blue(' [plugin-restart] '))
-              + c.yellow(`restarting server by ${pathPlatform.relative(root, file)}`),
-            )
-            timerState = ''
-          })
+          server.restart()
         }
         else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
           timerState = 'reload'

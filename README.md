@@ -40,7 +40,7 @@ export default {
       ]
     })
   ],
-};
+}
 ```
 
 Changes to `my.config.js` or `my.config.ts` will now restart the server automatically.
