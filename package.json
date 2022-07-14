@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-restart",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "packageManager": "pnpm@7.5.0",
   "description": "Custom files/globs to restart Vite server",
   "author": "antfu <anthonyfu117@hotmail.com>",
