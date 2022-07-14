@@ -23,10 +23,10 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm",
-    "dev": "npm run build -- --watch",
+    "dev": "nr build --watch",
     "lint": "eslint .",
-    "prepublishOnly": "npm run build",
-    "release": "bumpp --commit --tag --push"
+    "prepublishOnly": "nr build",
+    "release": "bumpp && npm publish"
   },
   "peerDependencies": {
     "vite": "^2.9.0 || ^3.0.0"
@@ -36,9 +36,11 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.25.2",
+    "@antfu/ni": "^0.16.3",
     "@types/debug": "^4.1.7",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^18.0.4",
+    "bumpp": "^8.2.1",
     "eslint": "^8.19.0",
     "picocolors": "^1.0.0",
     "rollup": "^2.76.0",
