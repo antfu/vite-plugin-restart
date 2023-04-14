@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import type { Plugin } from 'vite'
 import micromatch from 'micromatch'
@@ -24,17 +23,6 @@ interface Options {
   reload?: string | string[]
 }
 
-function touch(path: string) {
-  const time = new Date()
-
-  try {
-    fs.utimesSync(path, time, time)
-  }
-  catch (err) {
-    fs.closeSync(fs.openSync(path, 'w'))
-  }
-}
-
 let i = 0
 
 function toArray<T>(arr: T | T[] | undefined): T[] {
@@ -56,14 +44,14 @@ function VitePluginRestart(options: Options = {}): Plugin {
   let restartGlobs: string[] = []
 
   let timerState = 'reload'
-  let timer: number | undefined
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   function clear() {
     clearTimeout(timer)
   }
   function schedule(fn: () => void) {
     clear()
-    timer = setTimeout(fn, delay) as any as number
+    timer = setTimeout(fn, delay)
   }
 
   return {
