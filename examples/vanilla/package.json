@@ -1,14 +1,14 @@
 {
   "name": "vanila",
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },
   "devDependencies": {
-    "vite": "^4.0.1",
+    "vite": "^5.0.0",
     "vite-plugin-restart": "workspace:*"
   }
 }

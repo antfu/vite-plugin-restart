@@ -1,8 +1,9 @@
-import path from 'path'
+import path from 'node:path'
+import process from 'node:process'
 import type { Plugin } from 'vite'
 import micromatch from 'micromatch'
 
-interface Options {
+export interface VitePluginRestartOptions {
   /**
    * Enable glob support for watcher (it's disabled by Vite, but add this plugin will turn it on by default)
    *
@@ -33,7 +34,7 @@ function toArray<T>(arr: T | T[] | undefined): T[] {
   return [arr]
 }
 
-function VitePluginRestart(options: Options = {}): Plugin {
+function VitePluginRestart(options: VitePluginRestartOptions = {}): Plugin {
   const {
     delay = 500,
     glob: enableGlob = true,

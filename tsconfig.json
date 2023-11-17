@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "esnext",
     "target": "esnext",
     "lib": ["esnext", "DOM"],
-    "esModuleInterop": true,
-    "strict": true,
-    "strictNullChecks": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
     "skipLibCheck": true
   },
   "exclude": [
