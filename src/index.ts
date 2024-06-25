@@ -88,7 +88,9 @@ function VitePluginRestart(options: VitePluginRestartOptions = {}): Plugin {
       function handleFileChange(file: string) {
         if (micromatch.isMatch(file, restartGlobs)) {
           timerState = 'restart'
-          server.restart()
+          schedule(() => {
+            server.restart()
+          })
         }
         else if (micromatch.isMatch(file, reloadGlobs) && timerState !== 'restart') {
           timerState = 'reload'
