@@ -1,6 +1,6 @@
+import type { Plugin } from 'vite'
 import path from 'node:path'
 import process from 'node:process'
-import type { Plugin } from 'vite'
 import micromatch from 'micromatch'
 
 export interface VitePluginRestartOptions {
