@@ -2,7 +2,7 @@
   "name": "vite-plugin-restart",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.20.0",
   "description": "Custom files/globs to restart Vite server",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -42,16 +42,16 @@
     "micromatch": "^4.0.8"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.16.2",
-    "@antfu/ni": "^25.0.0",
+    "@antfu/eslint-config": "^6.2.0",
+    "@antfu/ni": "^27.0.1",
     "@types/debug": "^4.1.12",
-    "@types/micromatch": "^4.0.9",
-    "@types/node": "^24.0.13",
-    "bumpp": "^10.2.0",
-    "eslint": "^9.31.0",
-    "rollup": "^4.45.0",
-    "tsdown": "^0.12.9",
-    "typescript": "^5.8.3",
-    "vite": "^7.0.4"
+    "@types/micromatch": "^4.0.10",
+    "@types/node": "^24.9.2",
+    "bumpp": "^10.3.1",
+    "eslint": "^9.38.0",
+    "rollup": "^4.52.5",
+    "tsdown": "^0.15.12",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
   }
 }
